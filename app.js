@@ -94,10 +94,12 @@ function increase_key(major){
 
 function decrease_key(major){
     let index = major_list.indexOf(major); 
-    index = ((index - 1) % (major_list.length)) + major_list;
-    console.log("Index:" + index);
+    index = (((index - 1 + major_list.length) % (major_list.length)));
     let new_major = major_list[index];
-    first_note = major_to_first_note[new_major]; 
+    first_note = major_to_first_note[new_major];
+    console.log("Index:" + index + "\n"); 
+    console.log("New major:" + new_major);
+    console.log("New first_note:" + first_note);
     return new_major;
 }
 
