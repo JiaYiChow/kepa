@@ -1,0 +1,9 @@
+.notPressed {
+  fill: transparent;
+}
+
+.pressed {
+  opacity: 0.52;
+  fill: #241c1c;
+  stroke-width: 0.264583;
+}

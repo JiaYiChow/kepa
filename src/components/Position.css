@@ -1,0 +1,13 @@
+.nonActive {
+  fill: transparent;
+}
+
+.active {
+  opacity: 0.52;
+  fill: none;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-width: 0.176879;
+  stroke-dasharray: none;
+  stroke-opacity: 1;
+}

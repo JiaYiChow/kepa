@@ -1,0 +1,10 @@
+footer {
+  position: fixed;
+  text-align: center;
+  margin-top: auto;
+  padding: 0 75px 30px 75px;
+}
+
+.react-icons {
+  size: 2em;
+}

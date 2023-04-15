@@ -1,25 +1,15 @@
-# KePa -- The Pipa, played on Keyboard. 
-With the KePa, you can now play the pipa without having to purchase one expensive instrument or carry a heavy instrument. (and do not worry about it going out of tune)
+# KePa -- The Pipa, played on Keyboard.
 
-This program is written in javascript, and I realise I have to host it in a server of some sorts or run it in a webpage... Would be appreciated if someone can give me some ideas as to how I can create my program (or maybe give me suggestions for a better programming language to use, or suggestions in general).
+Written in React, the KePa is created as a tool to try out the traditional Chinese Pipa with minimal tools.
 
-## Using the KePa 
-For now you have to download this and drag the index.html page to use it. 
-The diagram below shows how to use it, the black represents your keyboard and the red represents the note/function: 
-![KePa diagram] (./images/KePa diagram.pdf)
+The traditional Pipa has a history spanning 2000 years, and it has a variety of techniques.
 
-Most probably gonna create a website where this thing works. (and maybe get some ad revenue yay)
+## Usage
 
-Stay tuned! 
+You can play either using the keyboard, or by clicking the strings. In keyboard mode, you can play the notes marked by the active region (the region inside the rectangle).
 
-## Progress 
-1. You can play the notes now. 
-2. Change octave by pressing up and down buttons. 
-3. Change key by pressing left and right buttons. 
+To toggle the active region, use the left and right keys.
 
-## Future plans 
-1. Functionality to record sounds :DDDDD (and maybe download)
-2. Including tremolo. (There is more than 1 way to do a tremolo, and each tremolo has different effects haha)
-3. Perhaps some other miscallnaeous techniques of the pipa because the pipa is awesome（扫弦，绞弦） :D
+The keyboard Pipa is designed to mimic the actual Pipa. The four rows on the keyboard represent the four strings in the pipa, the first string being the number row, the second string is the row that starts with 'Q', the third string is the row that starts with 'A', and the fourth string is the row that starts with 'Z'.
 
-
+The keys of "1", "Q", "A", and "Z" is fixed as the 'open' strings.
