@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/kepa/static/css/main.d153365d.css",
+    "main.js": "/kepa/static/js/main.0e3cef60.js",
+    "static/js/787.a9694524.chunk.js": "/kepa/static/js/787.a9694524.chunk.js",
+    "index.html": "/kepa/index.html",
+    "main.d153365d.css.map": "/kepa/static/css/main.d153365d.css.map",
+    "main.0e3cef60.js.map": "/kepa/static/js/main.0e3cef60.js.map",
+    "787.a9694524.chunk.js.map": "/kepa/static/js/787.a9694524.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d153365d.css",
+    "static/js/main.0e3cef60.js"
+  ]
+}
