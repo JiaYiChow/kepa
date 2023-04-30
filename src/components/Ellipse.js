@@ -14,7 +14,7 @@ export default function Ellipse({ id, handlePressed, cx, cy, rx, ry }) {
   useEffect(() => {
     const className = handlePressed.includes(id) ? "pressed" : "notPressed";
     setClassName(className);
-  }, [handlePressed]);
+  }, [handlePressed, className]);
 
   return (
     <ellipse

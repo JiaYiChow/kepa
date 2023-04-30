@@ -1,12 +1,14 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { KEY_TO_NOTE, NOTE_LIST } from "../constants/Notes";
 import Ellipse from "./Ellipse";
+import "./Pipa.css";
 import Position from "./Position";
 
 export default function Pipa() {
-  const [position, setPosition] = useState(1);
+  const [position, setPosition] = useState(0);
   const [activeNotes, setActiveNotes] = useState([]);
+  const divRef = useRef(null);
 
   const playMusic = (note) => {
     if (NOTE_LIST.includes(note)) {
@@ -22,7 +24,9 @@ export default function Pipa() {
     );
   };
   const audioFiles = _.map(NOTE_LIST, (note, index) => {
-    return <audio id={note} key={index} src={`assets/sounds/${note}.m4a`} />;
+    return (
+      <audio id={note} key={index} src={`kepa/assets/sounds/${note}.m4a`} />
+    );
   });
 
   const handleMouseUp = (event) => {
@@ -34,35 +38,33 @@ export default function Pipa() {
   };
 
   const handlePress = (event) => {
+    console.log(position);
     if (event.key === "ArrowRight") {
-      setPosition(Math.min(position + 1, 5));
+      setPosition(Math.min(position + 1, 4));
     } else if (event.key === "ArrowLeft") {
       setPosition(Math.max(position - 1, 0));
     }
     const key = event.key;
 
-    playMusic(KEY_TO_NOTE[key][position - 1]);
+    playMusic(KEY_TO_NOTE[key][position]);
   };
 
   const handleKeyUp = ({ key }) => {
-    stopPlayMusic(KEY_TO_NOTE[key][position - 1]);
+    //TODO add validation for the specific keys otherwise i will have stupid errors
+    stopPlayMusic(KEY_TO_NOTE[key][position]);
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handlePress);
-    window.addEventListener("keyup", handleKeyUp);
-    window.addEventListener("click", handleClick);
-    window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("keydown", handlePress);
-      window.addEventListener("keyup", handleKeyUp);
-      window.removeEventListener("click", handleClick);
-      window.addEventListener("mouseup", handleMouseUp);
-    };
-  }, [position]);
+    divRef.current.focus();
+  }, []);
   return (
-    <div>
+    <div
+      ref={divRef}
+      tabIndex={0}
+      autoFocus
+      onKeyDown={handlePress}
+      onKeyUp={handleKeyUp}
+    >
       <div>{audioFiles}</div>
       {/* <!-- Created with Inkscape (http://www.inkscape.org/) --> */}
       <svg
@@ -86,7 +88,7 @@ export default function Pipa() {
         </g>
         <Position
           id="position1"
-          position={1}
+          position={0}
           onPositionChange={position}
           width="67.297012"
           height="30.461143"
@@ -95,7 +97,7 @@ export default function Pipa() {
         />
         <Position
           id="position2"
-          position={2}
+          position={1}
           onPositionChange={position}
           width="37.742825"
           height="30.763399"
@@ -104,7 +106,7 @@ export default function Pipa() {
         />
         <Position
           id="position4"
-          position={4}
+          position={3}
           onPositionChange={position}
           width="24.58532"
           height="30.660017"
@@ -113,7 +115,7 @@ export default function Pipa() {
         />
         <Position
           id="position5"
-          position={5}
+          position={4}
           onPositionChange={position}
           width="18.911154"
           height="30.93129"
@@ -122,7 +124,7 @@ export default function Pipa() {
         />
         <Position
           id="position3"
-          position={3}
+          position={2}
           onPositionChange={position}
           width="26.390707"
           height="30.785168"
