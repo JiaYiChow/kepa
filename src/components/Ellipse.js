@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Ellipse.css";
-export default function Ellipse({ id, handlePressed, cx, cy, rx, ry }) {
+
+export default function Ellipse({ id, activeNotes, cx, cy, rx, ry }) {
   const [className, setClassName] = useState("notPressed");
 
   const handleMouseOver = () => {
@@ -12,9 +13,9 @@ export default function Ellipse({ id, handlePressed, cx, cy, rx, ry }) {
   };
 
   useEffect(() => {
-    const className = handlePressed.includes(id) ? "pressed" : "notPressed";
-    setClassName(className);
-  }, [handlePressed, className]);
+    const name = activeNotes.includes(id) ? "pressed" : "notPressed";
+    setClassName(name);
+  }, [activeNotes]);
 
   return (
     <ellipse
@@ -28,8 +29,4 @@ export default function Ellipse({ id, handlePressed, cx, cy, rx, ry }) {
       ry={ry}
     />
   );
-}
-
-export function Note() {
-  return <div></div>;
 }
