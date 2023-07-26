@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Input, Menu } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Menu } from "semantic-ui-react";
 
 export default function Header() {
   const [activeItem, setActiveItem] = useState("home");
@@ -9,19 +10,24 @@ export default function Header() {
   };
 
   return (
-    <Menu secondary>
+    <Menu>
       <Menu.Item
+        as={Link}
+        to="/kepa"
         name="kePa - the Keyboard Pipa"
         active={activeItem === "logo"}
-        onClick={handleItemClick}
       />
       <Menu.Item
+        as={Link}
+        to="/kepa/my-recordings"
         name="My Recordings"
         active={activeItem === "myRecordings"}
         onClick={handleItemClick}
       />
       <Menu.Menu position="right">
         <Menu.Item
+          as={Link}
+          to="/kepa/login"
           name="Login"
           active={activeItem === "login"}
           onClick={handleItemClick}

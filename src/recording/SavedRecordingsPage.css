@@ -1,0 +1,13 @@
+.recordings {
+  padding: 20px;
+}
+
+button {
+  float: right;
+  display: inline-block;
+  width: 0;
+  height: 0;
+}
+i {
+  color: rgba(0, 0, 0, 0.8);
+}
