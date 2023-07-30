@@ -2,11 +2,10 @@ import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { KEY_TO_NOTE, NOTE_LIST } from "../constants/Notes";
 import Ellipse from "./Ellipse";
-import "./Pipa.css";
+import "./Pipa.module.css";
 import Position from "./Position";
-import AudioRecorder from "./AudioRecorder";
 
-export default function Pipa() {
+export default function Pipa({isRecording, setAudioChunks}) {
   const [position, setPosition] = useState(0);
   const [activeNotes, setActiveNotes] = useState([]);
   const divRef = useRef(null);
@@ -23,12 +22,14 @@ export default function Pipa() {
     );
   });
 
-  console.log(audioElements.current)
   const playMusic = (note) => {
     if (NOTE_LIST.includes(note)) {
       setActiveNotes((curr) => [...curr, note]);
       const element = document.getElementById(note);
       element.play();
+      if (isRecording) {
+        setAudioChunks((curr) => [...curr, note]);
+      }
     }
   };
 
@@ -67,10 +68,6 @@ export default function Pipa() {
     divRef.current.focus();
   }, []);
 
-  useEffect(() => {
-
-  }, [])
-
   return (
     <div
       ref={divRef}
@@ -81,7 +78,6 @@ export default function Pipa() {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      {/* {audioElements ? (<AudioRecorder audioElements={audioElements.current} />) :null} */}
       <div>{audioFiles}</div>
       <svg
         viewBox="0 0 285.75 108"

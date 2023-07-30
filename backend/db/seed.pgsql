@@ -11,10 +11,12 @@ CREATE TABLE IF NOT EXISTS "User" (
 
 INSERT INTO "User" (userName, email, password) VALUES ('first', 'first@example.com', 'first');
 
+DROP TABLE IF EXISTS "Record";
+
 CREATE TABLE IF NOT EXISTS "Record" (
   recordId UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   userId UUID REFERENCES "User"(userId),
-  recordDateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  recordDateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   recordTitle VARCHAR(255),
   audioFile BYTEA
 );

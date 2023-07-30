@@ -1,33 +1,11 @@
-const { Pool } = require("pg");
 const pool = require("./db/db");
-
-const articles = {
-  "hello-world": {
-    title: "Hello World",
-    content:
-      'A "Hello, World!" program is generally a computer program that ignores any input and outputs or displays a message similar to "Hello, World!".',
-  },
-};
-
-const records = {
-  recordId: "1",
-  userId: "1",
-  creationDate: "07-22-2023",
-  title: "My first recording",
-  audio: "my blob(to implement later)",
-};
 
 async function createNewRecord(record) {
   try {
     const client = await pool.connect();
     const query =
-      'INSERT INTO "Record" (userId, recordDateTime, recordTitle, audioFile) VALUES ($1, $2, $3, $4) RETURNING *';
-    const values = [
-      record.userId,
-      record.recordDateTime,
-      record.recordTitle,
-      record.audioFile,
-    ];
+      'INSERT INTO "Record" (userId, recordTitle, audioFile) VALUES ($1, $2, $3) RETURNING *';
+    const values = [record.userId, record.recordTitle, record.audioFile];
 
     const result = await client.query(query, values);
     client.release();

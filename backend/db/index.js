@@ -1,11 +1,9 @@
+require("dotenv").config();
 const fs = require("fs");
 const { Client } = require("pg");
 
-require("dotenv").config();
+const seedQuery = fs.readFileSync("./db/seed.pgsql", { encoding: "utf-8" });
 
-const seedQuery = fs.readFileSync("seed.pgsql", { encoding: "utf-8" });
-
-// Replace the connection parameters with your PostgreSQL database credentials
 const client = new Client({
   user: process.env.DB_USERNAME,
   host: process.env.DB_HOST,
@@ -18,5 +16,5 @@ client.connect();
 client
   .query(seedQuery)
   .then(() => console.log("Table created successfully"))
-  .catch((err) => console.error("Error creating tables"))
+  .catch((err) => console.error("Error creating tables" + err))
   .finally(() => client.end());

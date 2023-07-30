@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
 
 const controller = require("./controller");
@@ -20,7 +21,14 @@ const shutdown = () => {
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 
+//set up cors
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+
 app.use(bodyParser.json());
+app.use(cors(corsOptions));
 
 app.listen(8080);
 

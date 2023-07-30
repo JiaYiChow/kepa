@@ -1,4 +1,5 @@
 import { Button, Card, Icon } from "semantic-ui-react";
+import styles from "./RecordItem.module.css"
 
 const RecordItem = ({ record }) => {
   const handleDelete = () => {
@@ -22,8 +23,8 @@ const RecordItem = ({ record }) => {
       <Card header={record.recordTitle}>
         <Card.Content>
           {record.recordTitle}
-          <Button basic inverted onClick={handleDelete}>
-            <Icon name="close" />
+          <Button basic inverted onClick={handleDelete} className={styles.button}>
+            <Icon name="close" className={styles.i}/>
           </Button>
         </Card.Content>
         <Card.Description>

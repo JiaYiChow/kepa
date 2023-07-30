@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "semantic-ui-react";
 import RecordItem from "./RecordItem";
-import "./SavedRecordingsPage.css";
+import styles from "./SavedRecordingsPage.module.css";
 
 const SavedRecordingsPage = () => {
   const [recordings, setRecordings] = useState([
@@ -27,9 +27,9 @@ const SavedRecordingsPage = () => {
     // fetchRecordings();
   }, []);
   return (
-    <div className="recordings">
+    <div className={styles.recordings}>
       <h1>My Recordings</h1>
-      <Card.Group className="recordings" itemsPerRow={6}>
+      <Card.Group className={styles.recordings} itemsPerRow={6}>
         {recordings.map((record) => (
           <RecordItem key={record.id} record={record} />
         ))}
