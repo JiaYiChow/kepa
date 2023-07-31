@@ -1,11 +1,19 @@
 .button {
-    float: right;
-    display: inline-block;
-    width: 0;
-    height: 0;
-  }
-
+  float: right;
+  display: inline-block;
+  width: 0;
+  height: 0;
+}
+z
 .i {
-    color: rgba(0, 0, 0, 0.8);
-  }
-  
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.i:hover,
+.i:active {
+  color: #ed1b0c;
+}
+
+.record-item {
+  padding: 10px;
+}

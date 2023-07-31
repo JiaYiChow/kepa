@@ -1,36 +1,26 @@
 import { Button, Card, Icon } from "semantic-ui-react";
-import styles from "./RecordItem.module.css"
+import styles from "./RecordItem.module.css";
 
-const RecordItem = ({ record }) => {
-  const handleDelete = () => {
-    const deleteRecording = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/records/${record.recordId}`, 
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json', // Set the appropriate Content-Type for your request
-          }}
-      );
-      if (!response.ok) {
-        throw new Error("Error deleting recordings");
-      }
-    };
-    deleteRecording();
-  }
+const RecordItem = ({ record, handleDelete }) => {
+
   return (
-    <div>
-      <Card header={record.recordTitle}>
+    <div className={styles["record-item"]}>
+      <Card raised>
         <Card.Content>
-          {record.recordTitle}
-          <Button basic inverted onClick={handleDelete} className={styles.button}>
-            <Icon name="close" className={styles.i}/>
+          {record.recordtitle}
+          <Button
+            basic
+            inverted
+            onClick={() => handleDelete(record.recordid)}
+            className={styles.button}
+          >
+            <Icon name="close" className={styles.i} />
           </Button>
         </Card.Content>
         <Card.Description>
-          <audio controls src={record.audioFile} />
+          <audio controls src={record.audiofile} />
         </Card.Description>
-        <Card.Content extra>Created {record.recordDateTime}</Card.Content>
+        <Card.Content extra>Created {record.recorddatetime}</Card.Content>
       </Card>
     </div>
   );

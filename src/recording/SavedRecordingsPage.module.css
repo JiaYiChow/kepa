@@ -1,3 +1,11 @@
 .recordings {
   padding: 20px;
 }
+
+.record-item {
+  padding: 20px;
+}
+
+.content {
+  display: flex;
+}

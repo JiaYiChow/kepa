@@ -35,17 +35,20 @@ export default function HomePage() {
 
   const playRecording = () => {
     setIsPlaying(true);
-  }
+  };
 
   const stopPlaying = () => {
     setIsPlaying(false);
-  }
+  };
 
   const saveRecording = () => {
     const textEncoder = new TextEncoder();
     const binaryData = audioChunks
       .map((audio) => textEncoder.encode(audio))
-      .reduce((acc, chunk) => new Uint8Array([...acc, ...chunk]), new Uint8Array());
+      .reduce(
+        (acc, chunk) => new Uint8Array([...acc, ...chunk]),
+        new Uint8Array()
+      );
     const record = {
       userId: "0db6e114-6121-4879-a688-59a5754ef10f",
       recordTitle: recordName,
