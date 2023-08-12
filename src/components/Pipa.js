@@ -5,11 +5,11 @@ import Ellipse from "./Ellipse";
 import "./Pipa.module.css";
 import Position from "./Position";
 
-export default function Pipa({isRecording, setAudioChunks}) {
+export default function Pipa({ isRecording, setAudioChunks }) {
   const [position, setPosition] = useState(0);
   const [activeNotes, setActiveNotes] = useState([]);
   const divRef = useRef(null);
-  const audioElements = useRef({});
+  const audioElements = useRef([]);
 
   const audioFiles = _.map(NOTE_LIST, (note, index) => {
     return (

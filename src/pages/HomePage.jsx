@@ -1,68 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AudioRecorder from "../components/AudioRecorder";
 import Pipa from "../components/Pipa";
+
 export default function HomePage() {
   const [isRecording, setIsRecording] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [audioChunks, setAudioChunks] = useState([]);
-  const [recordName, setRecordName] = useState("");
-  let i = 0;
-  let intervalId;
 
   const getAudioChunks = () => {
     return audioChunks;
-  };
-
-  useEffect(() => {
-    if (isPlaying) {
-      intervalId = setInterval(() => {
-        if (!isPlaying || i >= audioChunks.length) {
-          clearInterval(intervalId);
-          setIsPlaying(false);
-          return;
-        }
-        const element = document.getElementById(audioChunks[i]);
-        new Audio(element.src).play();
-        i = i + 1;
-      }, 3000);
-    }
-
-    return () => {
-      clearInterval(intervalId);
-      i = 0;
-    };
-  }, [isPlaying, audioChunks]);
-
-  const playRecording = () => {
-    setIsPlaying(true);
-  };
-
-  const stopPlaying = () => {
-    setIsPlaying(false);
-  };
-
-  const saveRecording = () => {
-    const textEncoder = new TextEncoder();
-    const binaryData = audioChunks
-      .map((audio) => textEncoder.encode(audio))
-      .reduce(
-        (acc, chunk) => new Uint8Array([...acc, ...chunk]),
-        new Uint8Array()
-      );
-    const record = {
-      userId: "0db6e114-6121-4879-a688-59a5754ef10f",
-      recordTitle: recordName,
-      audioFile: binaryData,
-    };
-    fetch("http://localhost:8080/api/records", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(record),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log("Response: ", data));
   };
 
   return (
@@ -71,14 +16,8 @@ export default function HomePage() {
       <AudioRecorder
         isRecording={isRecording}
         setRecording={setIsRecording}
-        audioChunks={audioChunks}
         setAudioChunks={setAudioChunks}
         getAudioChunks={getAudioChunks}
-        isPlaying={isPlaying}
-        stopPlaying={stopPlaying}
-        playRecording={playRecording}
-        setRecordName={setRecordName}
-        saveRecording={saveRecording}
       />
       <div className="content">
         <h2>Playing instructions</h2>

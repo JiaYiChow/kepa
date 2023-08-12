@@ -1,11 +1,11 @@
 const pool = require("./db/db");
 
-async function createNewRecord(record) {
+async function createNewRecord(userId, recordTitle, audioFileBuffer) {
   try {
     const client = await pool.connect();
     const query =
       'INSERT INTO "Record" (userId, recordTitle, audioFile) VALUES ($1, $2, $3) RETURNING *';
-    const values = [record.userId, record.recordTitle, record.audioFile];
+    const values = [userId, recordTitle, audioFileBuffer];
 
     const result = await client.query(query, values);
     client.release();

@@ -1,12 +1,9 @@
-.button {
+.i {
+  color: rgba(0, 0, 0, 0.8);
   float: right;
   display: inline-block;
   width: 0;
   height: 0;
-}
-z
-.i {
-  color: rgba(0, 0, 0, 0.8);
 }
 
 .i:hover,

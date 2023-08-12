@@ -8,21 +8,18 @@ const SavedRecordingsPage = () => {
 
   const handleDelete = (id) => {
     const deleteRecording = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/records/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:8080/api/records/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error("Error deleting recordings");
       }
     };
     deleteRecording();
-    setRecordings(recordings.filter(record => record.recordid !== id))
+    setRecordings(recordings.filter((record) => record.recordid !== id));
   };
 
   useEffect(() => {
@@ -39,14 +36,17 @@ const SavedRecordingsPage = () => {
     fetchRecordings();
   }, []);
 
-
   return (
     <div className={styles.recordings}>
       <h1>My Recordings</h1>
       <div className={styles.content}>
         <Card.Group centered itemsPerRow={2}>
           {recordings.map((record) => (
-            <RecordItem key={record.recordid} record={record} handleDelete={handleDelete} />
+            <RecordItem
+              key={record.recordid}
+              record={record}
+              handleDelete={handleDelete}
+            />
           ))}
         </Card.Group>
       </div>

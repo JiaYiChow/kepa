@@ -5,6 +5,10 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const multer = require("multer");
+
+const storage = multer.memoryStorage(); // Store files in memory
+const upload = multer({ storage: storage });
 const app = express();
 
 const controller = require("./controller");
@@ -27,11 +31,16 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 app.listen(8080);
 
 app.get("/api/records/user/:userId", controller.getAllRecordsByUserId);
-app.post("/api/records", controller.createNewRecord); //should see how paypal create card also
+app.post(
+  "/api/records",
+  upload.single("audioFile"),
+  controller.createNewRecord
+);
 app.delete("/api/records/:recordId", controller.deleteRecord);

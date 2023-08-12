@@ -11,7 +11,14 @@ async function getAllRecordsByUserId(req, res) {
 }
 
 async function createNewRecord(req, res) {
-  const record = await service.createNewRecord(req.body);
+  const { recordData } = req.body;
+  const { userId, recordTitle } = JSON.parse(recordData);
+  const record = await service.createNewRecord(
+    userId,
+    recordTitle,
+    req.file.buffer
+  );
+
   if (!record) {
     res.sendStatus(500);
   } else {

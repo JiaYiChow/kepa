@@ -1,14 +1,13 @@
-import { FaLinkedin } from "react-icons/fa";
-import { HiOutlineMail } from "react-icons/hi";
 import "./Footer.css";
+import { Icon } from "semantic-ui-react";
 export default function Footer() {
   return (
     <footer>
       <a href="https://www.linkedin.com/in/jia-yi-chow/">
-        <FaLinkedin />
+        <Icon color="grey" name="linkedin" size="huge" />
       </a>
       <a href="jcjiayichow@gmail.com">
-        <HiOutlineMail />
+        <Icon color="grey" name="mail" size="huge" />
       </a>
     </footer>
   );

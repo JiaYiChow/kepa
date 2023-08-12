@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import { toBlobURL } from "@ffmpeg/util";
+import { useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
 import styles from "./AudioRecorder.module.css";
 import SaveRecordingForm from "./SaveRecordingForm";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// const mimeType = "audio/mpeg";
+const ffmpeg = createFFmpeg({ log: true });
+
 const AudioRecorder = ({
   isRecording,
   setRecording,
-  setRecordName,
-  audioChunks,
   setAudioChunks,
   getAudioChunks,
-  playRecording,
-  saveRecording, 
-  isPlaying, 
-  stopPlaying
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  // const [stream, setStream] = useState(null);
-  // const [audioChunks, setAudioChunks] = useState(null);
-  // const [audio, setAudio] = useState(null);
-  // const mediaRecorder = useRef(null);
-  // const mediaStreamDestinationRef = useRef(null);
+  const [ffmpegReady, setffmpegReady] = useState(false);
+  const [audio, setAudio] = useState(null);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [recordName, setRecordName] = useState("");
 
   const startRecording = () => {
     setAudioChunks([]);
@@ -46,99 +44,128 @@ const AudioRecorder = ({
 
   const stopRecording = () => {
     setRecording(false);
-    setAudioChunks(getAudioChunks());
-    //   mediaRecorder.current.stop();
-    //   mediaRecorder.current.onstop = () => {
-    //     console.log("here");
-    //     const audioBlob = new Blob(audioChunks, { type: mimeType });
-    //     const audioURL = URL.createObjectURL(audioBlob);
-    //     setAudio(audioURL);
-
-    //     setAudioChunks([]);
-    //   };
+    const audioChunks = getAudioChunks();
+    concatenateAudio(audioChunks);
   };
 
-  // const sampleRate = 48000;
-  // const ctx = new (window.AudioContext || window.webkitAudioContext)( {"sampleRate": sampleRate} );
+  const concatenateAudio = async (audioFiles) => {
+    if (!ffmpegReady) {
+      console.error("FFmpeg.js is not loaded yet.");
+      return;
+    }
 
-  // function concatAndPlay() {
-  //   b1 = base64ToArrayBuffer( ogg48k.hello ).buffer;
-  //   b2 = base64ToArrayBuffer( ogg48k.world ).buffer;
-  //   ctx.decodeAudioData(b1, x=> ctx.decodeAudioData(b2, y=> {
-  //     var audioSource = ctx.createBufferSource();
-  //     audioSource.connect(ctx.destination);
+    const fetchFilePromises = audioFiles.map((file) =>
+      fetchFile(`kepa/assets/sounds/${file}.m4a`)
+    );
+    const inputArgs = await Promise.all(fetchFilePromises).then(
+      (fileContents) => {
+        return audioFiles.flatMap((file) => ["-i", `${file}.m4a`]);
+      }
+    );
 
-  //     // Concatenate the two buffers into one.
-  //     audioSource.buffer = appendBuffer(x, 1, y);
-  //     audioSource.connect( ctx.destination );
-  //     audioSource.start(0);
-  //   } ) );
+    await Promise.all(fetchFilePromises).then((filecontents) =>
+      audioFiles.map((file, idx) =>
+        ffmpeg.FS("writeFile", `${file}.m4a`, filecontents[idx])
+      )
+    );
 
-  //   // following code adapted from: https://stackoverflow.com/questions/14143652/web-audio-api-append-concatenate-different-audiobuffers-and-play-them-as-one-son
-  //   function appendBuffer(buffer1, pause, buffer2) {
-  //     var numberOfChannels = Math.min( buffer1.numberOfChannels, buffer2.numberOfChannels );
-  //     var tmp = ctx.createBuffer( numberOfChannels, (buffer1.length + buffer2.length + pause*buffer1.sampleRate), buffer1.sampleRate );
-  //     for (var i=0; i<numberOfChannels; i++) {
-  //       var channel = tmp.getChannelData(i);
-  //       channel.set( buffer1.getChannelData(i), 0);
-  //       channel.set( buffer2.getChannelData(i), buffer1.length+pause*buffer1.sampleRate);
-  //     }
-  //     return tmp;
-  //   }
-  // }
-  // useEffect(() => {
+    try {
+      await ffmpeg.run(
+        ...inputArgs,
+        "-filter_complex",
+        `concat=n=${audioFiles.length}:v=0:a=1`,
+        "output.mp3"
+      );
 
-  // const setUpMicrophone = async () => {
-  //   if ("MediaRecorder" in window) {
-  //     try {
-  //       const streamData = await navigator.mediaDevices.getUserMedia({
-  //         audio: true,
-  //         video: false,
-  //       });
-  //       setStream(streamData);
-  //     } catch (err) {
-  //       alert(err.message);
-  //     }
-  //   } else {
-  //     alert("Recording is not supported in your browser.");
-  //   }
-  // };
-  // if (!stream && audioElements) {
-  //     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  //     const mediaStreamDestination = audioContext.createMediaStreamDestination();
-  //     mediaStreamDestinationRef.current = mediaStreamDestination;
-  //     // audioElements.forEach((audioElement) => {
-  //     //     const audioSource = audioContext.createMediaElementSource(audioElement);
-  //     //     audioSource.connect(mediaStreamDestination);
-  //     //   });
-  //       setStream(mediaStreamDestination.stream);
+      const data = ffmpeg.FS("readFile", "output.mp3");
+      const audioBlob = new Blob([data.buffer], { type: "audio/mp4" });
+      const audioURL = URL.createObjectURL(audioBlob);
+      setAudio(audioURL);
+      setAudioBlob(audioBlob);
+    } catch (error) {
+      console.error("Failed to concatenate audio files:", error);
+    }
 
-  //   }
-  // }, [audioElements, stream]);
+    audioFiles.map((file) => ffmpeg.FS("unlink", `${file}.m4a`));
+    ffmpeg.FS("unlink", "output.mp3");
+  };
+
+  const saveRecording = () => {
+    const record = {
+      userId: "0db6e114-6121-4879-a688-59a5754ef10f",
+      recordTitle: recordName,
+    };
+    const formData = new FormData();
+    formData.append("recordData", JSON.stringify(record));
+    formData.append("audioFile", audioBlob);
+
+    fetch("http://localhost:8080/api/records", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => 
+        toast.success("Recording successfully created!", {
+          position: toast.POSITION.BOTTOM_CENTER
+        })
+      );
+  };
+
+  useEffect(() => {
+    const loadFFmpeg = async () => {
+      if (!ffmpeg.isLoaded()) {
+        const baseURL = "https://unpkg.com/@ffmpeg/core@0.12.1/dist/umd";
+        await ffmpeg.load({
+          coreURL: await toBlobURL(
+            `${baseURL}/ffmpeg-core.js`,
+            "text/javascript"
+          ),
+          wasmURL: await toBlobURL(
+            `${baseURL}/ffmpeg-core.wasm`,
+            "application/wasm"
+          ),
+        });
+      }
+      setffmpegReady(true);
+    };
+
+    loadFFmpeg();
+  }, []);
 
   return (
-    <div className={styles["audio-player"]}>
-      {!isRecording ? (
-        <Button secondary onClick={startRecording}>
-          Start Recording
-        </Button>
-      ) : null}
-      {isRecording ? (
-        <Button secondary onClick={stopRecording}>
-          Stop Recording
-        </Button>
-      ) : null}
-      {!isRecording && audioChunks.length > 0 ? (
-        <>
-          {!isPlaying ? <Button onClick={playRecording}>Play Recording </Button>: <Button onClick={stopPlaying}>Stop Playing </Button>}
-          <SaveRecordingForm
-        open={openModal}
-        setOpen={setOpenModal}
-        setRecordName={setRecordName}
-        saveRecording={saveRecording}
-        trigger={<Button onClick={setOpenModal}>Save Recording</Button>}
-      />
-        </>
+    <div>
+      {ffmpegReady ? (
+        <div className={styles["audio-player"]}>
+          {!isRecording ? (
+            <Button secondary onClick={startRecording}>
+              Start Recording
+            </Button>
+          ) : null}
+          {isRecording ? (
+            <Button secondary onClick={stopRecording}>
+              Stop Recording
+            </Button>
+          ) : null}
+          {audio ? (
+            <>
+              <div className={styles["audio-container"]}>
+                <audio src={audio} controls></audio>
+                <a download href={audio}>
+                  Download Recording
+                </a>
+              </div>
+
+              <SaveRecordingForm
+                open={openModal}
+                setOpen={setOpenModal}
+                setRecordName={setRecordName}
+                saveRecording={saveRecording}
+                trigger={<Button onClick={setOpenModal}>Save Recording</Button>}
+              />
+            </>
+          ) : null}
+          <ToastContainer />
+        </div>
       ) : null}
     </div>
   );
