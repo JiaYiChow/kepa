@@ -1,0 +1,12 @@
+.audio-player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.audio-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+  }

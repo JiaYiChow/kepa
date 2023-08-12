@@ -1,8 +1,8 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import "../components/Pipa.css";
 import { PipaNotes } from "../constants/Notes";
 import HomePage from "./HomePage";
-import "../components/Pipa.css";
 
 describe("HomePage is rendered", () => {
   it("Pipa icon should appear", () => {
@@ -17,11 +17,8 @@ describe("HomePage is rendered", () => {
     render(<HomePage />);
     const pointer = screen.getByTestId("pointer");
     userEvent.hover(pointer);
-    // pointer./
-    const style = window.getComputedStyle(pointer);
-    expect(style.opacity).toBe("0.52");
-    // expect(pointer).toHaveStyle(`fill: #241c1c`);
-    screen.debug();
+    expect(pointer).toHaveClass("pressed");
+    expect(pointer).toHaveStyle(`fill: #241c1c`);
   });
 });
 

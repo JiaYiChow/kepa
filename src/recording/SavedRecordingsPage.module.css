@@ -1,0 +1,24 @@
+.recordings {
+  padding: 20px;
+}
+
+.record-item {
+  padding: 20px;
+}
+
+.content {
+  display: flex;
+}
+
+audio {
+  padding: 10px;
+}
+audio::-webkit-media-controls-panel {
+  background-color: #fff;
+  width: inherit;
+}
+
+audio::-webkit-media-controls-current-time-display, 
+audio::-webkit-media-controls-time-remaining-display {
+  font-size: 16px;
+}
